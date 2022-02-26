@@ -9,9 +9,9 @@ import { Link, useRouteMatch } from "react-router-dom";
 export default function Navbar() {
   return (
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
+        <AppBar elevation={0} sx={{ bgcolor: "#EDD8D8" }} position="static">
           <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Typography variant="h1" component="div" sx={{ flexGrow: 1 }}>
               sensiAnalyzer
             </Typography>
             <NavTabs />
