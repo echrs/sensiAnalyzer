@@ -40,7 +40,7 @@ export default function Home() {
         />
       </FormGroup>
       <FormControl sx={{ width: "55ch" }}>
-        <OutlinedInput placeholder="Paste your ingredients here..." />
+        <OutlinedInput multiline="true" placeholder="Paste your ingredients here..." value="AQUA, COCO-CAPRYLATE, METHYLPROPANEDIOL, GLYCERIN, ISOAMYL LAURATE, BUTYROSPERMUM PARKII BUTTER, POTASSIUM CETYL PHOSPHATE, PANTHENOL, RESVERATROL, CAFFEINE, CAMELLIA SINENSIS LEAF EXTRACT, LECITHIN, ALLANTOIN, SODIUM ACRYLATE/SODIUM ACRYLOYLDIMETHYL TAURATE COPOLYMER, CYANOCOBALAMIN, ISOHEXADECANE, GLYCERYL STEARATE CITRATE, CARBOMER, XANTHAN GUM, CAPRYLYL GLYCOL, POLYSORBATE 80, SODIUM HYDROXIDE, SODIUM PHYTATE, LACTIC ACID, SODIUM BENZOATE, POTASSIUM SORBATE, PHENOXYETHANOL"/>
       </FormControl>
       <Button disableElevation variant="contained">
         Go!
