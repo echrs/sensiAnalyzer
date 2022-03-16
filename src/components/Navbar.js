@@ -28,7 +28,6 @@ function NavTabs() {
     "/register",
     "/",
   ]);
-  debugger;
   const currentTab = routeMatch?.path;
 
   return (

@@ -1,5 +1,4 @@
 import * as React from "react";
-import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
@@ -14,10 +13,12 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
-function createData(rating, name) {
+function createData(id, rating, name, description) {
   return {
+    id,
     rating,
-    name
+    name,
+    description
   };
 }
 
@@ -40,7 +41,7 @@ function Row(props) {
         <TableCell component="th" scope="row">
           {row.name}
         </TableCell>
-        <TableCell >{row.rating}</TableCell>
+        <TableCell>{row.rating}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -49,6 +50,7 @@ function Row(props) {
               <Typography variant="subtitle2" gutterBottom component="div">
                 Description
               </Typography>
+              {row.description}
             </Box>
           </Collapse>
         </TableCell>
@@ -57,22 +59,22 @@ function Row(props) {
   );
 }
 
-Row.propTypes = {
-  row: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    rating: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
-const rows = [
-  createData("Frozen yoghurt", "BEST"),
-  createData("Ice cream sandwich", "BEST"),
-  createData("Eclair", "BEST"),
-  createData("Cupcake", "BEST"),
-  createData("Gingerbread", "BEST"),
-];
-
 export default function CollapsibleTable() {
+  const [data, setData] = React.useState([]);
+  const rows = [];
+
+  React.useEffect(() => {
+    fetch("http://localhost:5000/ingredient")
+      .then((resp) => resp.json())
+      .then((resp) => {
+        setData(resp);
+      });
+  }, []);
+  
+  data.forEach(item => {
+    rows.push(createData(item._id, item.name, item.rating, item.description));
+  });
+
   return (
     <div>
       <Typography variant="h6" gutterBottom component="div">
@@ -84,12 +86,12 @@ export default function CollapsibleTable() {
             <TableRow>
               <TableCell />
               <TableCell>RATING</TableCell>
-              <TableCell >NAME</TableCell>
+              <TableCell>NAME</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <Row key={row.name} row={row} />
+              <Row key={row.id} row={row} />
             ))}
           </TableBody>
         </Table>
