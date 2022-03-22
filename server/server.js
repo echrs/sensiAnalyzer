@@ -17,6 +17,7 @@ mongoose
   .catch((err) => console.log(err));
 
 app.use("/ingredient", require("./routes/ingredient"));
+app.use("/user", require("./routes/user"));
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
