@@ -1,10 +1,5 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
+import { Tab, Button, Tabs, Typography, Toolbar, Box, AppBar } from "@mui/material";
 import { Link, useRouteMatch } from "react-router-dom";
 export default function Navbar() {
   return (
@@ -22,10 +17,11 @@ export default function Navbar() {
 }
 
 function NavTabs() {
+  const user = null;
   const routeMatch = useRouteMatch([
     "/ingredients",
     "/login",
-    "/register",
+    "/profile",
     "/",
   ]);
   const currentTab = routeMatch?.path;
@@ -34,8 +30,12 @@ function NavTabs() {
     <Tabs value={currentTab}>
       <Tab label="Home" value="/" to="/" component={Link} />
       <Tab label="Ingredients" value="/ingredients" to="/ingredients" component={Link} />
-      <Tab label="Login" value="/login" to="/login" component={Link} />
-      <Tab label="Register" value="/register" to="/register" component={Link} />
+      {user && <Tab label="Profile" value="/profile" to="/profile" component={Link} />}
+      {user ? (
+        <Button disableElevation>LOG OUT</Button> 
+      ) : (
+        <Tab label="Login" value="/login" to="/login" component={Link} />
+      )}
     </Tabs>
   );
 }
