@@ -7,17 +7,12 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { register, login } from '../actions/user';
 
 const initialState = { username: "", email: "", password: "", confirmPassword: "" };
 
 export default function Login() {
   const [form, setForm] = React.useState(initialState);
   const [isRegistering, setIsRegistering] = React.useState(false);
-  const dispatch = useDispatch();
-  const history = useHistory();
 
   const switchMode = () => {
     setForm(initialState);
@@ -27,11 +22,11 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (isRegistering) {
-      dispatch(register(form, history));
-    } else {
-      dispatch(login(form, history));
-    }
+    // if (isRegistering) {
+    //   dispatch(register(form, history));
+    // } else {
+    //   dispatch(login(form, history));
+    // }
   };
 
   const handleChange = (e) =>
