@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from 'react-router-dom';
 import {
   Container,
   Button,
@@ -7,10 +8,17 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
+import { login, register } from "../api/index.js";
 
-const initialState = { username: "", email: "", password: "", confirmPassword: "" };
+const initialState = {
+  username: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
 
 export default function Login() {
+  const history = useHistory();
   const [form, setForm] = React.useState(initialState);
   const [isRegistering, setIsRegistering] = React.useState(false);
 
@@ -21,16 +29,28 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // if (isRegistering) {
-    //   dispatch(register(form, history));
-    // } else {
-    //   dispatch(login(form, history));
-    // }
-  };
-
+    if (isRegistering) {
+      register(form).then(
+        () => {
+          // history.push('/profile');
+        },
+        (error) => {
+          console.log(error)
+        }
+      );    } else {
+      login(form).then(
+        () => {
+          history.push('/profile');
+        },
+        (error) => {
+          console.log(error)
+        }
+      );
+    }
+  };  
+  
   const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  setForm({ ...form, [e.target.name]: e.target.value });
 
   return (
     <Container component="main" maxWidth="xs">

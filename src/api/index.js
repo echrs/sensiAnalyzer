@@ -1,15 +1,24 @@
-import axios from 'axios';
+import axios from "axios";
+import authHeader from "./header";
 
-const api = axios.create({ baseURL: 'http://localhost:5000' });
+const api = axios.create({ baseURL: "http://localhost:5000" });
 
-api.interceptors.request.use((req) => {
-  if (localStorage.getItem('profile')) {
-    req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`;
-  }
+//user
+export const register = (formData) => api.post("/user/register", formData);
+export const login = (formData) =>
+  api.post("/user/login", formData).then((resp) => {
+    if (resp.data.accessToken) {
+      localStorage.setItem("profile", JSON.stringify(resp.data));
+    }
+    return resp.data;
+  });
+export const logout = () => {
+  localStorage.removeItem("profile");
+};
 
-  return req;
-});
+export const getCurrentUser = () => {
+  return JSON.parse(localStorage.getItem("profile"));
+};
 
-export const register = (formData) => api.post('/user/register', formData);
-export const login = (formData) => api.post('/user/login', formData);
-export const fetchAllIngredients = () => api.get('/ingredient');
+//general
+export const fetchAllIngredients = () => api.get("/ingredient");
