@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import {
-  Container,
+  Alert,
   Button,
   Paper,
   Grid,
@@ -21,6 +21,8 @@ export default function Login() {
   const history = useHistory();
   const [form, setForm] = React.useState(initialState);
   const [isRegistering, setIsRegistering] = React.useState(false);
+  const [failMsg, setFailMsg] = React.useState("");
+  const [succMsg, setSuccMsg] = React.useState("");
 
   const switchMode = () => {
     setForm(initialState);
@@ -32,19 +34,21 @@ export default function Login() {
     if (isRegistering) {
       register(form).then(
         () => {
-          // history.push('/profile');
+          setSuccMsg("Registration successful.");
+          history.go("/profile");
         },
         (error) => {
-          console.log(error);
+          setFailMsg("Please try again.");
         }
       );
     } else {
       login(form).then(
         () => {
-          history.push("/profile");
+          setSuccMsg("Login successful.");
+          history.go("/profile");
         },
         (error) => {
-          console.log(error);
+          setFailMsg("Please try again.");
         }
       );
     }
@@ -137,6 +141,16 @@ export default function Login() {
               : "Don't have an account? Join us"}
           </Button>
         </Grid>
+        {failMsg.length > 0 && (
+          <Grid item>
+            <Alert severity="error">{failMsg}</Alert>
+          </Grid>
+        )}
+        {succMsg.length > 0 && (
+          <Grid item>
+            <Alert severity="success">{succMsg}</Alert>
+          </Grid>
+        )}
       </Paper>
     </Grid>
   );

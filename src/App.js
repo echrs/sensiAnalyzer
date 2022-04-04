@@ -7,6 +7,7 @@ import Ingredients from "./pages/Ingredients";
 import Results from "./pages/Results";
 import Profile from "./pages/Profile";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { getCurrentUser } from "./api/index.js";
 
 const theme = createTheme({
   palette: {
@@ -41,7 +42,7 @@ const theme = createTheme({
 });
 
 function App() {
-  const user = JSON.parse(localStorage.getItem('profile'));
+  const user = getCurrentUser();
 
   return (
     <ThemeProvider theme={theme}>
@@ -51,8 +52,8 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route path="/results" component={Results} />
           <Route path="/ingredients" component={Ingredients} />
-          <Route path="/login" component={Login} />
-          <Route path="/profile" component={() => (!user ? <Profile /> : <Redirect to="/login" />)} />
+          <Route path="/login" component={() => (!user ? <Login /> : <Redirect to="/profile" />)} />
+          <Route path="/profile" component={() => (user ? <Profile /> : <Redirect to="/login" />)} />
         </Switch>
       </Router>
     </ThemeProvider>
