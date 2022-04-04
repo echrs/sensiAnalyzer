@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import {
   Container,
   Button,
@@ -35,82 +35,109 @@ export default function Login() {
           // history.push('/profile');
         },
         (error) => {
-          console.log(error)
+          console.log(error);
         }
-      );    } else {
+      );
+    } else {
       login(form).then(
         () => {
-          history.push('/profile');
+          history.push("/profile");
         },
         (error) => {
-          console.log(error)
+          console.log(error);
         }
       );
     }
-  };  
-  
+  };
+
   const handleChange = (e) =>
-  setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Paper>
+    <Grid
+      container
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+      style={{ minHeight: "calc(100vh - 64px)" }}
+    >
+      <Paper
+        elevation={0}
+        style={{
+          padding: "1.8%",
+          display: "grid",
+          textAlign: "center",
+          verticalAlign: "middle",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Typography variant="h3">
           {isRegistering ? "Join us" : "Welcome back"}
         </Typography>
-        <form onSubmit={handleSubmit}>
-          <Grid item xs={12} sm={8} md={5}>
-            {isRegistering && (
-              <TextField
-                margin="normal"
-                required
-                label="Username"
-                name="username"
-                onChange={handleChange}
-                autoFocus
-              />
-            )}
+        <Grid item>
+          {isRegistering && (
             <TextField
               margin="normal"
               required
-              name="email"
-              label="Email address"
+              label="Username"
+              name="username"
               onChange={handleChange}
-              type="email"
+              autoFocus
             />
+          )}
+        </Grid>
+        <Grid item>
+          <TextField
+            margin="normal"
+            required
+            name="email"
+            label="Email address"
+            onChange={handleChange}
+            type="email"
+          />{" "}
+        </Grid>
+        <Grid item>
+          <TextField
+            margin="normal"
+            required
+            name="password"
+            label="Password"
+            onChange={handleChange}
+            type="password"
+          />{" "}
+        </Grid>
+        <Grid item>
+          {isRegistering && (
             <TextField
               margin="normal"
               required
-              name="password"
-              label="Password"
+              name="confirmPassword"
+              label="Confirm password"
               onChange={handleChange}
               type="password"
             />
-            {isRegistering && (
-              <TextField
-                margin="normal"
-                required
-                name="confirmPassword"
-                label="Confirm password"
-                onChange={handleChange}
-                type="password"
-              />
-            )}
-          </Grid>
-          <Button type="submit" fullWidth variant="contained" color="primary">
+          )}
+        </Grid>
+        <Grid item>
+          <Button
+            disableElevation
+            onClick={handleSubmit}
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
             {isRegistering ? "Register" : "Login"}
           </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Button onClick={switchMode}>
-                {isRegistering
-                  ? "Already have an account? Login"
-                  : "Don't have an account? Join us"}
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
+        </Grid>
+        <Grid item>
+          <Button style={{ paddingLeft: "0px" }} onClick={switchMode}>
+            {isRegistering
+              ? "Already have an account? Login"
+              : "Don't have an account? Join us"}
+          </Button>
+        </Grid>
       </Paper>
-    </Container>
+    </Grid>
   );
 }

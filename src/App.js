@@ -12,11 +12,11 @@ const theme = createTheme({
   palette: {
     primary: {
       main: "#C99C9C",
+      contrastText: '#ffffff',
     },
     secondary: {
       main: "#856565",
     },
-
     contrastThreshold: 3,
   },
   typography: {
@@ -32,6 +32,10 @@ const theme = createTheme({
     h2: {
       fontFamily: "'Codystar', cursive",
       fontSize: 44,
+    },
+    h3: {
+      color: "#624A4A",
+      fontSize: 42
     }
   },
 });
