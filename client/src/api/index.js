@@ -1,7 +1,11 @@
 import axios from "axios";
 import authHeader from "./header";
 
-const api = axios.create();
+var api = axios.create();
+
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+  api = axios.create({ baseURL: "http://localhost:5000" });
+}
 
 //user
 export const register = (formData) => api.post("/user/register", formData);

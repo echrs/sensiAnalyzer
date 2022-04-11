@@ -8,6 +8,7 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
+import { fetchAllIngredients } from "../api/index.js";
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -129,10 +130,9 @@ export default function CollapsibleTable() {
   const rows = [];
 
   React.useEffect(() => {
-    fetch("http://localhost:5000/ingredient")
-      .then((resp) => resp.json())
+    fetchAllIngredients()
       .then((resp) => {
-        setData(resp);
+        setData(resp.data);
       });
   }, []);
 
