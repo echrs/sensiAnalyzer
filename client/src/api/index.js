@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./header";
 
-const api = axios.create({ baseURL: "http://localhost:5000" });
+const api = axios.create();
 
 //user
 export const register = (formData) => api.post("/user/register", formData);
