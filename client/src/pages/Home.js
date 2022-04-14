@@ -11,6 +11,18 @@ import {
 } from "@mui/material";
 
 export default function Home() {
+  const [text, setText] = React.useState("");
+
+  const analyze = () => {
+    var arr = text.ingredientsText.split(',').map(a => a.split('|'));
+    arr = arr[0].map(a => a.trim());
+    arr = arr.map(a => a.replace(/\./g, ''));
+    debugger;
+  };
+
+  const handleChange = (e) =>
+    setText({ ...text, [e.target.name]: e.target.value });
+
   return (
     <Grid
       spacing={1}
@@ -33,44 +45,46 @@ export default function Home() {
       <Grid item>
         <FormGroup aria-label="position" row>
           <FormControlLabel
-            value="end"
+            value="Fragrances"
             control={<Checkbox />}
             label="Fragrances"
-            labelPlacement="end"
           />
           <FormControlLabel
-            value="end"
-            color="white"
+            value="Alcohols"
             control={<Checkbox />}
             label="Alcohols"
-            labelPlacement="end"
           />
           <FormControlLabel
-            value="end"
+            value="Parabens"
             control={<Checkbox />}
             label="Parabens"
-            labelPlacement="end"
           />
           <FormControlLabel
-            value="end"
+            value="Essential oils"
             control={<Checkbox />}
             label="Essential oils"
-            labelPlacement="end"
           />
         </FormGroup>
       </Grid>
       <Grid item>
         <FormControl sx={{ width: "90ch" }}>
           <OutlinedInput
-            style={{background: "#ffffff"}}
+            name="ingredientsText"
+            style={{ background: "#ffffff" }}
             multiline
             minRows={10}
             placeholder="Paste your ingredients here..."
+            onChange={handleChange}
           />
         </FormControl>
       </Grid>
       <Grid item>
-        <Button disableElevation variant="contained">
+        <Button
+          type="submit"
+          onClick={analyze}
+          disableElevation
+          variant="contained"
+        >
           Go!
         </Button>
       </Grid>

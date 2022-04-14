@@ -25,13 +25,33 @@ export default function CollapsibleTable() {
     rows.push(createData(item.rating, item.name, item.description));
   });
 
-  const columns = ["RATING", "NAME", "DESCRIPTION"];
+  const columns = [
+    {
+      name: "RATING",
+      options: {
+        filter: true,
+      },
+    },
+    {
+      name: "NAME",
+      options: {
+        filter: false,
+      },
+    },
+    {
+      name: "DESCRIPTION",
+      options: {
+        filter: false,
+      },
+    },
+  ];
   const options = {
-    print: "false",
-    download: "false",
+    print: false,
+    download: false,
     filterType: "checkbox",
     selectableRows: "none",
     elevation: 0,
+    viewColumns: false
   };
   return (
     <Container>
@@ -46,7 +66,7 @@ export default function CollapsibleTable() {
           variant="h3"
           gutterBottom
           component="div"
-          sx={{ marginBottom: "-5%" }}
+          sx={{ marginBottom: "-1%" }}
         >
           Ingredient list
         </Typography>
