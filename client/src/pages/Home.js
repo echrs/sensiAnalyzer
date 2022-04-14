@@ -35,26 +35,26 @@ export default function Home() {
           <FormControlLabel
             value="end"
             control={<Checkbox />}
-            label="End"
+            label="Fragrances"
             labelPlacement="end"
           />
           <FormControlLabel
             value="end"
             color="white"
             control={<Checkbox />}
-            label="End"
+            label="Alcohols"
             labelPlacement="end"
           />
           <FormControlLabel
             value="end"
             control={<Checkbox />}
-            label="End"
+            label="Parabens"
             labelPlacement="end"
           />
           <FormControlLabel
             value="end"
             control={<Checkbox />}
-            label="End"
+            label="Essential oils"
             labelPlacement="end"
           />
         </FormGroup>
