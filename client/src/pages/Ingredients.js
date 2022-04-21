@@ -68,7 +68,7 @@ export default function CollapsibleTable() {
           component="div"
           sx={{ marginBottom: "-1%" }}
         >
-          Ingredient list
+          Look up ingredients
         </Typography>
         <MUIDataTable
           title={""}

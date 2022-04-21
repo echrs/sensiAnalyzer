@@ -11,17 +11,36 @@ import {
 } from "@mui/material";
 
 export default function Home() {
+  const filters = [
+    { name: "Fragrances" },
+    { name: "Alcohols" },
+    { name: "Parabens" },
+    { name: "Essential oils" },
+  ];
+
   const [text, setText] = React.useState("");
+  const [checkedState, setCheckedState] = React.useState(
+    new Array(filters.length).fill(false)
+  );
 
   const analyze = () => {
-    var arr = text.ingredientsText.split(',').map(a => a.split('|'));
-    arr = arr[0].map(a => a.trim());
-    arr = arr.map(a => a.replace(/\./g, ''));
+    var arr = text.ingredientsText.split(",").map((a) => a.split("|"));
+    arr = arr[0].map((a) => a.trim());
+    arr = arr.map((a) => a.replace(/\./g, ""));
     debugger;
   };
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setText({ ...text, [e.target.name]: e.target.value });
+  };
+
+  const handleCheckboxChange = (position) => {
+    const updatedCheckedState = checkedState.map((item, index) =>
+      index === position ? !item : item
+    );
+    setCheckedState(updatedCheckedState);
+    debugger;
+  };
 
   return (
     <Grid
@@ -44,26 +63,21 @@ export default function Home() {
       </Grid>
       <Grid item>
         <FormGroup aria-label="position" row>
-          <FormControlLabel
-            value="Fragrances"
-            control={<Checkbox />}
-            label="Fragrances"
-          />
-          <FormControlLabel
-            value="Alcohols"
-            control={<Checkbox />}
-            label="Alcohols"
-          />
-          <FormControlLabel
-            value="Parabens"
-            control={<Checkbox />}
-            label="Parabens"
-          />
-          <FormControlLabel
-            value="Essential oils"
-            control={<Checkbox />}
-            label="Essential oils"
-          />
+          {filters.map(({ name }, index) => {
+            return (
+              <FormControlLabel
+                key={index}
+                value={name}
+                control={
+                  <Checkbox
+                    checked={checkedState[index]}
+                    onChange={() => handleCheckboxChange(index)}
+                  />
+                }
+                label={name}
+              />
+            );
+          })}
         </FormGroup>
       </Grid>
       <Grid item>
