@@ -11,23 +11,19 @@ import {
 } from "@mui/material";
 
 export default function Home() {
-  const filters = [
-    { name: "Fragrances" },
-    { name: "Alcohols" },
-    { name: "Parabens" },
-    { name: "Essential oils" },
-  ];
-
   const [text, setText] = React.useState("");
-  const [checkedState, setCheckedState] = React.useState(
-    new Array(filters.length).fill(false)
-  );
+
+  const [filters, setFilters] = React.useState([
+    { name: "Fragrances", checked: false },
+    { name: "Alcohols", checked: false },
+    { name: "Parabens", checked: false },
+    { name: "Essential oils", checked: false },
+  ]);
 
   const analyze = () => {
     var arr = text.ingredientsText.split(",").map((a) => a.split("|"));
     arr = arr[0].map((a) => a.trim());
     arr = arr.map((a) => a.replace(/\./g, ""));
-    debugger;
   };
 
   const handleChange = (e) => {
@@ -35,11 +31,14 @@ export default function Home() {
   };
 
   const handleCheckboxChange = (position) => {
-    const updatedCheckedState = checkedState.map((item, index) =>
-      index === position ? !item : item
-    );
-    setCheckedState(updatedCheckedState);
-    debugger;
+    let updatedFilters = filters.map((filter, index) => {
+      if (index === position) {
+        return { ...filter, checked: !filter.checked };
+      }
+      return filter;
+    });
+
+    setFilters(updatedFilters);
   };
 
   return (
@@ -70,7 +69,7 @@ export default function Home() {
                 value={name}
                 control={
                   <Checkbox
-                    checked={checkedState[index]}
+                    checked={filters[index].checked}
                     onChange={() => handleCheckboxChange(index)}
                   />
                 }
