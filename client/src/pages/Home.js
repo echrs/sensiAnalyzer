@@ -9,15 +9,16 @@ import {
   OutlinedInput,
   Button,
 } from "@mui/material";
+import { parabens, alcohols, fragrances, essentialOils } from './Categories'
 
 export default function Home() {
   const [text, setText] = React.useState("");
 
   const [filters, setFilters] = React.useState([
-    { name: "Fragrances", checked: false },
-    { name: "Alcohols", checked: false },
-    { name: "Parabens", checked: false },
-    { name: "Essential oils", checked: false },
+    { name: "Fragrances", checked: false, ingredients: fragrances },
+    { name: "Alcohols", checked: false, ingredients: alcohols },
+    { name: "Parabens", checked: false, ingredients: parabens},
+    { name: "Essential oils", checked: false, ingredients: essentialOils },
   ]);
 
   const analyze = () => {
