@@ -9,22 +9,29 @@ import {
   OutlinedInput,
   Button,
 } from "@mui/material";
-import { parabens, alcohols, fragrances, essentialOils } from './Categories'
+import { parabens, alcohols, fragrances, surfactants } from "./Categories";
 
 export default function Home() {
   const [text, setText] = React.useState("");
 
   const [filters, setFilters] = React.useState([
-    { name: "Fragrances", checked: false, ingredients: fragrances },
-    { name: "Alcohols", checked: false, ingredients: alcohols },
-    { name: "Parabens", checked: false, ingredients: parabens},
-    { name: "Essential oils", checked: false, ingredients: essentialOils },
+    { name: "Fragrances", checked: false, ingredients: fragrances, found: false },
+    { name: "Alcohols", checked: false, ingredients: alcohols, found: false },
+    { name: "Parabens", checked: false, ingredients: parabens, found: false },
+    { name: "Surfactants", checked: false, ingredients: surfactants, found: false },
   ]);
 
   const analyze = () => {
-    var arr = text.ingredientsText.split(",").map((a) => a.split("|"));
-    arr = arr[0].map((a) => a.trim());
-    arr = arr.map((a) => a.replace(/\./g, ""));
+    if (text.length > 0) {
+      var arr = text.ingredientsText.split(/[,\\/|]/);
+      arr = arr.map((a) => a.replace(/\./g, ""));
+      arr = arr.map((a) => a.trim());
+      arr = arr.map((a) => a.toLowerCase());
+      var checkedFilters = filters.map((f, idx) => (f.checked ? idx : "")).filter(String);
+      //todo
+      var found = arr.some(a => filters[1].ingredients.includes(a));
+      debugger;
+    }
   };
 
   const handleChange = (e) => {
