@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Ingredients from "./pages/Ingredients";
-import Results from "./pages/Results";
 import Profile from "./pages/Profile";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { getCurrentUser } from "./api/index.js";
@@ -50,7 +49,6 @@ function App() {
         <Navbar />
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/results" component={Results} />
           <Route path="/ingredients" component={Ingredients} />
           <Route path="/login" component={() => (!user ? <Login /> : <Redirect to="/profile" />)} />
           <Route path="/profile" component={() => (user ? <Profile /> : <Redirect to="/login" />)} />
