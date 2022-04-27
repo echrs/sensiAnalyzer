@@ -201,6 +201,7 @@ export default function Home() {
               onClick={resetAll}
               disableElevation
               variant="contained"
+              sx={{marginTop: '2%'}}
             >
               TRY AGAIN?
             </Button>
@@ -210,6 +211,7 @@ export default function Home() {
               onClick={saveProduct}
               disableElevation
               variant="contained"
+              sx={{marginTop: '2%'}}
             >
               SAVE
             </Button>
