@@ -1,8 +1,7 @@
 import * as React from "react";
 import { Container, Typography, Paper } from "@mui/material";
-import { fetchAllIngredients } from "../api/index.js";
 import MUIDataTable from "mui-datatables";
-
+import { Context } from "../Context"
 function createData(RATING, NAME, DESCRIPTION) {
   return {
     RATING,
@@ -12,16 +11,10 @@ function createData(RATING, NAME, DESCRIPTION) {
 }
 
 export default function Ingredients() {
-  const [data, setData] = React.useState([]);
+  const { ingredientCtx } = React.useContext(Context);
   const rows = [];
 
-  React.useEffect(() => {
-    fetchAllIngredients().then((resp) => {
-      setData(resp.data);
-    });
-  }, []);
-
-  data.forEach((item) => {
+  ingredientCtx[0].forEach((item) => {
     rows.push(createData(item.rating, item.name, item.description));
   });
 

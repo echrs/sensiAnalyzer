@@ -9,10 +9,9 @@ import {
   OutlinedInput,
   Button,
   Modal,
-  Box
+  Box,
 } from "@mui/material";
-import { fetchAllFilters, getCurrentUser } from "../api/index.js";
-
+import { Context } from "../Context";
 
 export default function Home() {
   const [openModal, setOpenModal] = React.useState(false);
@@ -20,6 +19,7 @@ export default function Home() {
   const handleCloseModal = () => setOpenModal(false);
   const [txt, setTxt] = React.useState("");
   const [flag, setFlag] = React.useState(false);
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -34,21 +34,8 @@ export default function Home() {
 
   const [inputText, setInputText] = React.useState("");
 
-  const user = getCurrentUser();
-  const [filters, setFilters] = React.useState([]);
-
-  React.useEffect(() => {
-    fetchAllFilters(user?.userId).then((resp) => {
-      let filters = resp.data.map(item => {
-        return {
-          ...item,
-          checked: false,
-          found: false
-        }
-      })
-      setFilters(filters);
-    });
-  }, []);
+  const { filterCtx } = React.useContext(Context);
+  const [filters, setFilters] = filterCtx;
 
   const analyze = () => {
     if (inputText) {
@@ -88,6 +75,16 @@ export default function Home() {
               `Oh no! Your product contains ${flagged[0].name.toLowerCase()}, ${flagged[1].name.toLowerCase()}, ${flagged[2].name.toLowerCase()} and ${flagged[3].name.toLowerCase()}.`
             );
             break;
+          case 5:
+            setTxt(
+              `Oh no! Your product contains ${flagged[0].name.toLowerCase()}, ${flagged[1].name.toLowerCase()}, ${flagged[2].name.toLowerCase()}, ${flagged[3].name.toLowerCase()} and ${flagged[4].name.toLowerCase()}.`
+            );
+            break;
+          case 6:
+            setTxt(
+              `Oh no! Your product contains ${flagged[0].name.toLowerCase()}, ${flagged[1].name.toLowerCase()}, ${flagged[2].name.toLowerCase()}, ${flagged[3].name.toLowerCase()}, ${flagged[4].name.toLowerCase()} and ${flagged[5].name.toLowerCase()}.`
+            );
+            break;
           default:
             setTxt("Oops!");
             break;
@@ -108,16 +105,16 @@ export default function Home() {
 
   const resetAll = () => {
     setInputText("");
-    let resetFilters = filters.map(item => {
+    let resetFilters = filters.map((item) => {
       return {
         ...item,
         checked: false,
-        found: false
-      }
-    })
+        found: false,
+      };
+    });
     setFilters(resetFilters);
     handleCloseModal();
-  }
+  };
 
   const handleChange = (e) => {
     setInputText(e.target.value);
@@ -212,7 +209,7 @@ export default function Home() {
               onClick={resetAll}
               disableElevation
               variant="contained"
-              sx={{marginTop: '2%'}}
+              sx={{ marginTop: "2%" }}
             >
               TRY AGAIN?
             </Button>
@@ -222,7 +219,7 @@ export default function Home() {
               onClick={saveProduct}
               disableElevation
               variant="contained"
-              sx={{marginTop: '2%'}}
+              sx={{ marginTop: "2%" }}
             >
               SAVE
             </Button>

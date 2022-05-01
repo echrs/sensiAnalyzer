@@ -7,6 +7,7 @@ import Ingredients from "./pages/Ingredients";
 import Profile from "./pages/Profile";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { getCurrentUser } from "./api/index.js";
+import { Provider } from './Context'
 
 const theme = createTheme({
   palette: {
@@ -44,6 +45,7 @@ function App() {
   const user = getCurrentUser();
 
   return (
+    <Provider>
     <ThemeProvider theme={theme}>
       <Router>
         <Navbar />
@@ -55,6 +57,7 @@ function App() {
         </Switch>
       </Router>
     </ThemeProvider>
+    </Provider>
   );
 }
 

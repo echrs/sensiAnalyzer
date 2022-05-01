@@ -2,12 +2,11 @@ const router = require("express").Router();
 let Filter = require("../models/filter");
 
 router.route("/add").post(async (req, res) => {
-    const { name, ingrList, userId, defaultF } = req.body;
-  
+    const { name, ingrList, userId, visibility, defaultF } = req.body;
     try {
       const existingFilter = await Filter.findOne({ name });
       if (existingFilter) return res.status(400).json({ message: "A filter with this name already exists!" });
-      Filter.create({ name, ingrList, userId, defaultF });
+      await Filter.create({ name, ingrList, userId, visibility, defaultF });
       res.status(201).json({ message: "Successfully added" });
     } catch (error) {
       res.status(500).json({ message: "Something went wrong" });
