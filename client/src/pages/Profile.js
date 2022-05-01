@@ -3,6 +3,8 @@ import {
   IconButton,
   Box,
   Modal,
+  TextField,
+  Button,
   Chip,
   Stack,
   Grid,
@@ -12,25 +14,51 @@ import {
   ListItem,
   ListItemSecondaryAction,
   ListItemText,
+  Alert,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import { getCurrentUser } from "../api/index.js";
+import {
+  getCurrentUser,
+  addFilter,
+  deleteFilter,
+  updateFilter,
+} from "../api/index.js";
 import { Context } from "../Context";
 
+const initialState = {
+  name: "",
+  ingrList: "",
+  userId: "",
+  visibility: false,
+  isDefault: false,
+};
+
 export default function Profile() {
-  //modal
   const [openModal, setOpenModal] = React.useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => {
     setOpenModal(false);
     setIsAdd(false);
-  }
-  const [isAdd, setIsAdd] = React.useState(false);
+    setFailMsg("");
+    setSuccMsg("");
+    setFormEdit(initialState);
+    setIdx();
+  };
+  const [failMsg, setFailMsg] = React.useState("");
+  const [succMsg, setSuccMsg] = React.useState("");
 
+  const [isAdd, setIsAdd] = React.useState(false);
+  const [formEdit, setFormEdit] = React.useState(initialState);
+  const [formAdd, setFormAdd] = React.useState(initialState);
+
+  const user = getCurrentUser();
+  const { allFilterCtx } = React.useContext(Context);
+  const [filters, setFilters, fetchFilters] = allFilterCtx;
+  const [idx, setIdx] = React.useState();
   const style = {
     position: "absolute",
     top: "50%",
@@ -42,27 +70,84 @@ export default function Profile() {
     boxShadow: 24,
     p: 4,
   };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isAdd) {
+      let form = formAdd;
+      form.userId = user.userId;
+      if (form.ingrList.length > 0) {
+        form.ingrList = prepIngrList(form.ingrList);
+      }
+      setFormAdd(form);
+      addFilter(form).then(
+        () => {
+          setSuccMsg("Filter added successfully.");
+          fetchFilters();
+          setTimeout(() => handleCloseModal(), 1000);
+        },
+        (error) => {
+          setFailMsg("Please try again.");
+          setTimeout(() => handleCloseModal(), 1000);
+        }
+      );
+    } else {
+      if (idx >= 0) {
+        if (formEdit.ingrList.length > 0) {
+          formEdit.ingrList = prepIngrList(formEdit.ingrList);
+        }
+        let data = { name: formEdit.name, ingrList: formEdit.ingrList };
+        await updateFilter(data, filters[idx]._id);
+        setSuccMsg("Filter edited successfully.");
+        fetchFilters();
+        setTimeout(() => handleCloseModal(), 1000);
+      }
+    }
+  };
 
-  //profile
-  const user = getCurrentUser();
-  const { filterCtx } = React.useContext(Context);
-  const [filters, setFilters] = filterCtx;
+  const handleChange = (e) => {
+    if (isAdd) setFormAdd({ ...formAdd, [e.target.name]: e.target.value });
+    else setFormEdit({ ...formEdit, [e.target.name]: e.target.value });
+  };
 
-  const addFilter = () => {
+  const prepIngrList = (ingrList) => {
+    let updatedIngrList = ingrList.split(/[,\\/|]/);
+    updatedIngrList = updatedIngrList.map((a) => a.replace(/\./g, ""));
+    updatedIngrList = updatedIngrList.map((a) => a.trim());
+    updatedIngrList = updatedIngrList.map((a) => a.toUpperCase());
+    return updatedIngrList;
+  }
+
+  const addNewFilter = () => {
     handleOpenModal();
     setIsAdd(true);
-  }
+  };
 
-  const deleteFilter = (e, index) => {
-  }
+  const removeFilter = async (e, index) => {
+    if (index >= 0) {
+      await deleteFilter(filters[index]._id);
+      fetchFilters();
+    }
+  };
 
   const editFilter = (e, index) => {
     handleOpenModal();
-  }
+    let modifiedFilters = filters.map((filter, idx) => {
+      if (idx === index) {
+        return { ...filter, ingrList: filter.ingrList.join(', ').toLowerCase() };
+      }
+      return filter;
+    });
+    setFormEdit(modifiedFilters[index]);
+    setIdx(index);
+  };
 
-  const setVisibility = (e, index, value) => {
-
-  }
+  const setVisibility = async (e, index, value) => {
+    if (index >= 0) {
+      let data = { visibility: value };
+      await updateFilter(data, filters[index]._id);
+      fetchFilters();
+    }
+  };
 
   return (
     <Grid
@@ -105,7 +190,7 @@ export default function Profile() {
             sx={{ paddingBottom: "8px" }}
             size="small"
             aria-label="Add"
-            onClick={addFilter}
+            onClick={addNewFilter}
           >
             <AddIcon />
           </IconButton>
@@ -125,21 +210,37 @@ export default function Profile() {
                 <ListItemSecondaryAction>
                   {!isDefault && (
                     <>
-                      <IconButton edge="end" aria-label="Delete" onClick={(e) => deleteFilter(e, idx)}>
+                      <IconButton
+                        edge="end"
+                        aria-label="Delete"
+                        onClick={(e) => removeFilter(e, idx)}
+                      >
                         <DeleteIcon />
                       </IconButton>
-                      <IconButton edge="end" aria-label="Edit" onClick={(e) => editFilter(e, idx)}>
+                      <IconButton
+                        edge="end"
+                        aria-label="Edit"
+                        onClick={(e) => editFilter(e, idx)}
+                      >
                         <SettingsIcon />
                       </IconButton>
                     </>
                   )}
-                  {visibility && (
-                    <IconButton edge="end" aria-label="VisibleNot" onClick={(e) => setVisibility(e, idx, false)}>
+                  {!visibility && (
+                    <IconButton
+                      edge="end"
+                      aria-label="VisibleNot"
+                      onClick={(e) => setVisibility(e, idx, true)}
+                    >
                       <VisibilityOffIcon />
                     </IconButton>
                   )}
-                  {!visibility && (
-                    <IconButton edge="end" aria-label="Visible" onClick={(e) => setVisibility(e, idx, true)}>
+                  {visibility && (
+                    <IconButton
+                      edge="end"
+                      aria-label="Visible"
+                      onClick={(e) => setVisibility(e, idx, false)}
+                    >
                       <VisibilityIcon />
                     </IconButton>
                   )}
@@ -159,23 +260,64 @@ export default function Profile() {
           SAVED PRODUCTS
         </Typography>
         <Modal
-        open={openModal}
-        onClose={handleCloseModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            {isAdd && "Add filter"}
-            {!isAdd && "Edit filter"}
-          </Typography>
-
-        </Box>
-      </Modal>
-        {/* <Stack direction="row" spacing={1}>
-          <Chip label="Deletable" onDelete={handleDelete} />
-          <Chip label="Deletable" variant="outlined" onDelete={handleDelete} />
-        </Stack> */}
+          open={openModal}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              {isAdd && "Add filter"}
+              {!isAdd && "Edit filter"}
+            </Typography>
+            <Grid item>
+              <TextField
+                margin="normal"
+                required
+                label="Name"
+                name="name"
+                defaultValue={formEdit.name}
+                onChange={handleChange}
+                autoFocus
+                variant="standard"
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                margin="normal"
+                required
+                label="Ingredient list"
+                name="ingrList"
+                defaultValue={formEdit.ingrList}
+                helperText="For example: Benzene, azelaic acid"
+                onChange={handleChange}
+                variant="standard"
+              />
+            </Grid>
+            <Grid item>
+              <Button
+                disableElevation
+                onClick={handleSubmit}
+                type="submit"
+                variant="contained"
+                color="primary"
+                sx={{ marginTop: "2%", marginBottom: "2%" }}
+              >
+                Save
+              </Button>
+            </Grid>
+            {failMsg.length > 0 && (
+              <Grid item>
+                <Alert severity="error">{failMsg}</Alert>
+              </Grid>
+            )}
+            {succMsg.length > 0 && (
+              <Grid item>
+                <Alert severity="success">{succMsg}</Alert>
+              </Grid>
+            )}
+          </Box>
+        </Modal>
       </Paper>
     </Grid>
   );

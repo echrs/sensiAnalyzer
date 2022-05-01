@@ -34,8 +34,8 @@ export default function Home() {
 
   const [inputText, setInputText] = React.useState("");
 
-  const { filterCtx } = React.useContext(Context);
-  const [filters, setFilters] = filterCtx;
+  const { visibleFilterCtx } = React.useContext(Context);
+  const [filters, setFilters] = visibleFilterCtx;
 
   const analyze = () => {
     if (inputText) {
@@ -53,6 +53,7 @@ export default function Home() {
       let flagged = updatedFilters.filter(
         (filter) => filter.checked && filter.found
       );
+      // :)
       if (flagged.length > 0) {
         switch (flagged.length) {
           case 1:

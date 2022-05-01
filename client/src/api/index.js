@@ -27,6 +27,8 @@ export const getCurrentUser = () => {
 //general
 export const fetchAllIngredients = () => api.get("/ingredient");
 export const fetchAllFilters = (uid) => api.get("/filter",  { params: { userId: uid }});
-
-// export const addFilter = () => api.post("/filter/add", {
-//   name, ingrList});
+export const addFilter = (formData) => api.post("/filter/add", formData).then((resp) => {
+  return resp.data;
+});
+export const deleteFilter = (filterId) => api.delete(`/filter/delete/${filterId}`);
+export const updateFilter = (data, filterId) => api.put(`/filter/update/${filterId}`, data);
