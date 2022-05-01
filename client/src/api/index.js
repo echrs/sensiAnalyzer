@@ -26,3 +26,7 @@ export const getCurrentUser = () => {
 
 //general
 export const fetchAllIngredients = () => api.get("/ingredient");
+export const fetchAllFilters = (uid) => api.get("/filter",  { params: { userId: uid }});
+
+// export const addFilter = () => api.post("/filter/add", {
+//   name, ingrList});

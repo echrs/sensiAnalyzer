@@ -22,7 +22,7 @@ router.route("/login").post(async (req, res) => {
       secret,
       { expiresIn: "3h" }
     );
-    res.status(200).json({ username: existingUser.username, token: token });
+    res.status(200).json({ userId: existingUser._id, username: existingUser.username, token: token });
   } catch (err) {
     res.status(500).json({ message: "Something went wrong" });
     console.log(error);

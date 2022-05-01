@@ -1,10 +1,12 @@
-const mongoose = require("mongoose");
+const { Schema, mongoose } = require("mongoose");
 
-const filterSchema = {
-  name: String,
-  default: Boolean,
-  ingrList: Array,
-};
+const filterSchema = new Schema({
+  name: { type: String, required: true },
+  ingrList: { type: Array, required: true },
+  userId: { type: Schema.Types.ObjectId, required: true },
+  default: { type: Boolean, required: true },
+  visibility: {type: Boolean, required: true }
+});
 
 const Filter = mongoose.model("Filter", filterSchema, "filters");
 

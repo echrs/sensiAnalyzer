@@ -11,7 +11,7 @@ function createData(RATING, NAME, DESCRIPTION) {
   };
 }
 
-export default function CollapsibleTable() {
+export default function Ingredients() {
   const [data, setData] = React.useState([]);
   const rows = [];
 

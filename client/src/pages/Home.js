@@ -11,7 +11,8 @@ import {
   Modal,
   Box
 } from "@mui/material";
-import { parabens, alcohols, fragrances, surfactants } from "./Categories";
+import { fetchAllFilters, getCurrentUser } from "../api/index.js";
+
 
 export default function Home() {
   const [openModal, setOpenModal] = React.useState(false);
@@ -33,18 +34,21 @@ export default function Home() {
 
   const [inputText, setInputText] = React.useState("");
 
-  const initialFiltersState = [
-    { name: "Fragrances", checked: false, ingredients: fragrances, found: false },
-    { name: "Alcohols", checked: false, ingredients: alcohols, found: false },
-    { name: "Parabens", checked: false, ingredients: parabens, found: false },
-    { name: "Surfactants", checked: false, ingredients: surfactants, found: false },
-  ];
-  const [filters, setFilters] = React.useState([
-    { name: "Fragrances", checked: false, ingredients: fragrances, found: false },
-    { name: "Alcohols", checked: false, ingredients: alcohols, found: false },
-    { name: "Parabens", checked: false, ingredients: parabens, found: false },
-    { name: "Surfactants", checked: false, ingredients: surfactants, found: false },
-  ]);
+  const user = getCurrentUser();
+  const [filters, setFilters] = React.useState([]);
+
+  React.useEffect(() => {
+    fetchAllFilters(user?.userId).then((resp) => {
+      let filters = resp.data.map(item => {
+        return {
+          ...item,
+          checked: false,
+          found: false
+        }
+      })
+      setFilters(filters);
+    });
+  }, []);
 
   const analyze = () => {
     if (inputText) {
@@ -55,7 +59,7 @@ export default function Home() {
       let updatedFilters = filters.map((filter) => {
         return {
           ...filter,
-          found: arr.some((a) => filter.ingredients.includes(a)),
+          found: arr.some((a) => filter.ingrList.includes(a)),
         };
       });
       setFilters(updatedFilters);
@@ -104,7 +108,14 @@ export default function Home() {
 
   const resetAll = () => {
     setInputText("");
-    setFilters(initialFiltersState);
+    let resetFilters = filters.map(item => {
+      return {
+        ...item,
+        checked: false,
+        found: false
+      }
+    })
+    setFilters(resetFilters);
     handleCloseModal();
   }
 

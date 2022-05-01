@@ -20,6 +20,7 @@ mongoose
 
 app.use("/ingredient", require("./routes/ingredient"));
 app.use("/user", require("./routes/user"));
+app.use("/filter", require("./routes/filter"));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
