@@ -53,43 +53,16 @@ export default function Home() {
       let flagged = updatedFilters.filter(
         (filter) => filter.checked && filter.found
       );
-      // :)
       if (flagged.length > 0) {
-        switch (flagged.length) {
-          case 1:
-            setTxt(
-              `Oh no! Your product contains ${flagged[0].name.toLowerCase()}.`
-            );
-            break;
-          case 2:
-            setTxt(
-              `Oh no! Your product contains ${flagged[0].name.toLowerCase()} and ${flagged[1].name.toLowerCase()}.`
-            );
-            break;
-          case 3:
-            setTxt(
-              `Oh no! Your product contains ${flagged[0].name.toLowerCase()}, ${flagged[1].name.toLowerCase()} and ${flagged[2].name.toLowerCase()}.`
-            );
-            break;
-          case 4:
-            setTxt(
-              `Oh no! Your product contains ${flagged[0].name.toLowerCase()}, ${flagged[1].name.toLowerCase()}, ${flagged[2].name.toLowerCase()} and ${flagged[3].name.toLowerCase()}.`
-            );
-            break;
-          case 5:
-            setTxt(
-              `Oh no! Your product contains ${flagged[0].name.toLowerCase()}, ${flagged[1].name.toLowerCase()}, ${flagged[2].name.toLowerCase()}, ${flagged[3].name.toLowerCase()} and ${flagged[4].name.toLowerCase()}.`
-            );
-            break;
-          case 6:
-            setTxt(
-              `Oh no! Your product contains ${flagged[0].name.toLowerCase()}, ${flagged[1].name.toLowerCase()}, ${flagged[2].name.toLowerCase()}, ${flagged[3].name.toLowerCase()}, ${flagged[4].name.toLowerCase()} and ${flagged[5].name.toLowerCase()}.`
-            );
-            break;
-          default:
-            setTxt("Oops!");
-            break;
-        }
+        let str = "";
+        flagged.forEach((item, index) => {
+          if (index + 1 === flagged.length) {
+            str = str.concat(item.name.toLowerCase());
+          } else {
+            str = str.concat(item.name.toLowerCase() + ", ");
+          }
+        });
+        setTxt(`Oh no! Your product contains ${str}.`);
         setFlag(true);
         handleOpenModal();
       } else {
