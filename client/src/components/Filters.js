@@ -1,8 +1,8 @@
 import * as React from "react";
-import SettingsIcon from "@mui/icons-material/Settings";
+import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddIcon from "@mui/icons-material/Add";
 import { Context } from "../Context";
 import {
@@ -186,17 +186,17 @@ export default function Filters() {
                   <>
                     <IconButton
                       edge="end"
-                      aria-label="Delete"
-                      onClick={(e) => removeFilter(e, idx)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                    <IconButton
-                      edge="end"
                       aria-label="Edit"
                       onClick={(e) => editFilter(e, idx)}
                     >
-                      <SettingsIcon />
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      aria-label="Delete"
+                      onClick={(e) => removeFilter(e, idx)}
+                    >
+                      <DeleteOutlineIcon />
                     </IconButton>
                   </>
                 )}

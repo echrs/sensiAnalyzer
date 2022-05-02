@@ -19,6 +19,7 @@ export default function Profile() {
       <Paper
         elevation={0}
         style={{
+          maxWidth: "50%",
           minWidth: "50%",
           minHeight: "50%",
           padding: "1.8%",

@@ -3,6 +3,7 @@ import {
   fetchAllIngredients,
   getCurrentUser,
   fetchAllFilters,
+  fetchAllProducts
 } from "./api/index.js";
 
 export const Context = React.createContext({});
@@ -12,14 +13,18 @@ export const Provider = (props) => {
 
   const [ingredients, setIngredients] = React.useState([]);
 
+  const [visibleFilters, setVisibleFilters] = React.useState([]);
+  const [allFilters, setAllFilters] = React.useState([]);
+
+  const [allProducts, setAllProducts] = React.useState([]);
+
   React.useEffect(() => {
     fetchAllIngredients().then((resp) => {
       setIngredients(resp.data);
     });
+    fetchFilters();
+    fetchProducts();
   }, []);
-
-  const [visibleFilters, setVisibleFilters] = React.useState([]);
-  const [allFilters, setAllFilters] = React.useState([]);
 
   const fetchFilters = () => {
     fetchAllFilters(user?.userId).then((resp) => {
@@ -37,9 +42,18 @@ export const Provider = (props) => {
     });
   }
 
-  React.useEffect(() => {
-    fetchFilters();
-  }, []);
+  const fetchProducts = () => {
+    fetchAllProducts(user?.userId).then((resp) => {
+      let prods = resp.data
+      .map((item) => {
+        return {
+          ...item,
+          ingrListStr: item.ingrList.join(", ").toLowerCase()
+        };
+      })
+      setAllProducts(prods);
+    });
+  }
 
   return (
     <Context.Provider
@@ -47,6 +61,7 @@ export const Provider = (props) => {
         ingredientCtx: [ingredients, setIngredients],
         visibleFilterCtx: [visibleFilters, setVisibleFilters],
         allFilterCtx: [allFilters, setAllFilters, fetchFilters],
+        allProductCtx: [allProducts, setAllProducts, fetchProducts],
       }}
     >
       {props.children}

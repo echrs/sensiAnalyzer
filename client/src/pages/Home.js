@@ -57,8 +57,10 @@ export default function Home() {
 
   const [inputText, setInputText] = React.useState("");
 
-  const { visibleFilterCtx } = React.useContext(Context);
+  const { visibleFilterCtx, allProductCtx } = React.useContext(Context);
   const [filters, setFilters] = visibleFilterCtx;
+
+  const [products, setProducts, fetchProducts] = allProductCtx;
 
   const analyze = () => {
     if (inputText) {
@@ -106,6 +108,7 @@ export default function Home() {
       () => {
         setSuccMsg("Product saved successfully.");
         setTimeout(() => handleCloseModal(), 1000);
+        fetchProducts();
       },
       (error) => {
         setFailMsg("Please try again.");
@@ -118,7 +121,7 @@ export default function Home() {
     setInputText(e.target.value);
   };
 
-  const handleSaveChange = (e) => {
+  const handleProdNameChange = (e) => {
     setProdName(e.target.value);
   };
 
@@ -226,7 +229,7 @@ export default function Home() {
                   name="name"
                   autoFocus
                   variant="standard"
-                  onChange={handleSaveChange}
+                  onChange={handleProdNameChange}
                 />
               </Grid>
               <Button
