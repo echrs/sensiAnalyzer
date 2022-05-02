@@ -38,37 +38,35 @@ export default function SavedProducts() {
       </Typography>
       {products.map(({ name, ingrListStr }, idx) => {
         return (
-          <>
-            <Accordion key={idx}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-              >
-                <Typography>{name}</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid>
-                  <Grid item>
-                    <Typography>{ingrListStr}</Typography>
-                  </Grid>
-                  <Grid item>
-                    <Grid container direction="row-reverse">
-                      <Grid item>
-                        <IconButton
-                          sx={{ marginRight: "2%" }}
-                          edge="end"
-                          aria-label="Delete"
-                          onClick={(e) => removeProduct(e, idx)}
-                        >
-                          <DeleteOutlineIcon />
-                        </IconButton>
-                      </Grid>
+          <Accordion key={idx}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+            >
+              <Typography>{name}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid>
+                <Grid item>
+                  <Typography>{ingrListStr}</Typography>
+                </Grid>
+                <Grid item>
+                  <Grid container direction="row-reverse">
+                    <Grid item>
+                      <IconButton
+                        sx={{ marginRight: "2%" }}
+                        edge="end"
+                        aria-label="Delete"
+                        onClick={(e) => removeProduct(e, idx)}
+                      >
+                        <DeleteOutlineIcon />
+                      </IconButton>
                     </Grid>
                   </Grid>
                 </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </>
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
         );
       })}
     </>
