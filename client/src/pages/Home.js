@@ -10,15 +10,38 @@ import {
   Button,
   Modal,
   Box,
+  TextField,
+  Alert
 } from "@mui/material";
 import { Context } from "../Context";
+import { getCurrentUser, addProduct } from "../api/index";
 
 export default function Home() {
+  const user = getCurrentUser();
   const [openModal, setOpenModal] = React.useState(false);
   const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setFailMsg("");
+    setSuccMsg("");
+    setInputArr([]);
+    setProdName("");
+    setInputText("");
+    let resetFilters = filters.map((item) => {
+      return {
+        ...item,
+        checked: false,
+        found: false,
+      };
+    });
+    setFilters(resetFilters);
+  };
   const [txt, setTxt] = React.useState("");
   const [flag, setFlag] = React.useState(false);
+  const [failMsg, setFailMsg] = React.useState("");
+  const [succMsg, setSuccMsg] = React.useState("");
+  const [inputArr, setInputArr] = React.useState([]);
+  const [prodName, setProdName] = React.useState("");
 
   const style = {
     position: "absolute",
@@ -43,6 +66,7 @@ export default function Home() {
       arr = arr.map((a) => a.replace(/\./g, ""));
       arr = arr.map((a) => a.trim());
       arr = arr.map((a) => a.toUpperCase());
+      setInputArr(arr);
       let updatedFilters = filters.map((filter) => {
         return {
           ...filter,
@@ -74,24 +98,28 @@ export default function Home() {
   };
 
   const saveProduct = () => {
-    handleCloseModal();
-  };
-
-  const resetAll = () => {
-    setInputText("");
-    let resetFilters = filters.map((item) => {
-      return {
-        ...item,
-        checked: false,
-        found: false,
-      };
-    });
-    setFilters(resetFilters);
-    handleCloseModal();
+    addProduct({
+      name: prodName,
+      ingrList: inputArr,
+      userId: user.userId,
+    }).then(
+      () => {
+        setSuccMsg("Product saved successfully.");
+        setTimeout(() => handleCloseModal(), 1000);
+      },
+      (error) => {
+        setFailMsg("Please try again.");
+        setTimeout(() => handleCloseModal(), 1000);
+      }
+    );
   };
 
   const handleChange = (e) => {
     setInputText(e.target.value);
+  };
+
+  const handleSaveChange = (e) => {
+    setProdName(e.target.value);
   };
 
   const handleCheckboxChange = (position) => {
@@ -180,7 +208,7 @@ export default function Home() {
           </Typography>
           {flag && (
             <Button
-              onClick={resetAll}
+              onClick={handleCloseModal}
               disableElevation
               variant="contained"
               sx={{ marginTop: "2%" }}
@@ -189,14 +217,45 @@ export default function Home() {
             </Button>
           )}
           {!flag && (
-            <Button
-              onClick={saveProduct}
-              disableElevation
-              variant="contained"
-              sx={{ marginTop: "2%" }}
-            >
-              SAVE
-            </Button>
+            <>
+              <Grid item>
+                <TextField
+                  margin="normal"
+                  required
+                  label="Product name"
+                  name="name"
+                  autoFocus
+                  variant="standard"
+                  onChange={handleSaveChange}
+                />
+              </Grid>
+              <Button
+                onClick={saveProduct}
+                disableElevation
+                variant="contained"
+                sx={{ marginTop: "2%" }}
+              >
+                SAVE
+              </Button>
+              <Button
+                onClick={handleCloseModal}
+                disableElevation
+                variant="contained"
+                sx={{ marginTop: "2%", marginLeft: "3%" }}
+              >
+                CANCEL
+              </Button>
+              {failMsg.length > 0 && (
+                <Grid item>
+                  <Alert sx={{ marginTop: "2%" }} severity="error">{failMsg}</Alert>
+                </Grid>
+              )}
+              {succMsg.length > 0 && (
+                <Grid item>
+                  <Alert sx={{ marginTop: "2%" }} severity="success">{succMsg}</Alert>
+                </Grid>
+              )}
+            </>
           )}
         </Box>
       </Modal>
