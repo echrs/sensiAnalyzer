@@ -12,7 +12,7 @@ router.route("/delete/:id").delete((req, res) => {
 
 router.route("/").get((req, res) => {
     const userId = req.query.userId;
-    Product.find().or([{ userId }, { isDefault: true }])
+    Product.find({ userId })
     .then((data) => {
         res.json(data);
     })
