@@ -16,7 +16,7 @@ router.route("/update/:id").put((req, res) => {
 
 router.route("/").get((req, res) => {
   const userId = req.query.userId;
-  Filter.find().or([{ userId }, { isDefault: true }])
+  Filter.find({ userId })
     .then((data) => {
       res.json(data);
     })

@@ -1,8 +1,10 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { surfactants, alcohols, parabens, fragrances } = require("../DefaultFilters");
 
 let User = require("../models/user");
+let Filter = require("../models/filter");
 
 const secret = process.env.JWT_SECRET;
 
@@ -41,6 +43,10 @@ router.route("/register").post(async (req, res) => {
       email,
       password: hashedPassword,
     });
+    await Filter.create({ name: "Surfactants", ingrList: surfactants, userId: result._id, visibility: true, isDefault: true });
+    await Filter.create({ name: "Alcohols", ingrList: alcohols, userId: result._id, visibility: true, isDefault: true });
+    await Filter.create({ name: "Fragrances", ingrList: fragrances, userId: result._id, visibility: true, isDefault: true });
+    await Filter.create({ name: "Parabens", ingrList: parabens, userId: result._id, visibility: true, isDefault: true });
     const token = jwt.sign({ email: result.email, id: result._id }, secret, {
       expiresIn: "3h",
     });
