@@ -219,7 +219,17 @@ export default function Home() {
               TRY AGAIN?
             </Button>
           )}
-          {!flag && (
+        {!flag && !user && (
+            <Button
+              onClick={handleCloseModal}
+              disableElevation
+              variant="contained"
+              sx={{ marginTop: "2%" }}
+            >
+              GREAT
+            </Button>
+          )}
+          {!flag && user && (
             <>
               <Grid item>
                 <TextField
